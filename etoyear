@@ -1,5 +1,5 @@
 #!/bin/bash
-readonly VER='0.0.2'
+readonly VER='0.0.3'
 readonly CREATE_YEAR='2019'
 readonly AUTHOR='haruna <github.com/eggplants>'
 readonly DEFAULT_YEAR=`date +%Y`
@@ -88,7 +88,7 @@ local _ind=$((${_year}%12))
 
 for i in `seq 0 ${_times}`;do
     echo ${_animals[$(((${_ind}+$i)%12))]}
-done|nl -v "${_year}"
+done|nl -n ln -s' ' -v "${_year}"
 }
 main $@
 exit $?
