@@ -19,7 +19,7 @@ sudo install -m+x etoyear /usr/local/bin
 ## Usage
 
 ```shellsession
-$ ./etoyear
+$ etoyear
 2019 🐗
 2020 🐁
 2021 🐄
@@ -44,6 +44,27 @@ $ etoyear -k 1999 100
 2096 辰
 2097 巳
 2098 午
+```
+
+## Help
+
+```shellsession
+$ etoyear -h
+NAME:
+    etoyear - show eto-year list
+
+USAGE:
+    etoyear [-hvk] <begin> <num>
+
+VERSION:
+    etoyear version 0.0.4
+    Copyright (c) 2019-2021 haruna <github.com/eggplants>
+    Released under the MIT License.
+
+OPTION:
+   -h, --help    : show help
+   -v, --version : show version
+   -k, --kanji   : show animal(s) in kanji
 ```
 
 ## License
