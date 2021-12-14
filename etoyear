@@ -1,9 +1,8 @@
-#!/bin/bash
-readonly VER='0.0.3'
-readonly CREATE_YEAR='2019'
+#!/usr/bin/env bash
+
+readonly VER='0.0.4'
+readonly CREATE_YEAR='2019-2021'
 readonly AUTHOR='haruna <github.com/eggplants>'
-readonly DEFAULT_YEAR=$(date +%Y)
-readonly DEFAULT_LINE='12'
 readonly ANIMALS_EMOJI=(
   🐒 🐔 🐕 🐗 🐁 🐄
   🐯 🐇 🐲 🐍 🐎 🐏
@@ -12,6 +11,7 @@ readonly ANIMALS_KANJI=(
   申 酉 戌 亥 子 丑
   寅 卯 辰 巳 午 羊
 )
+
 # help
 function show_help() {
   cat << EOS
@@ -19,11 +19,7 @@ NAME:
     etoyear - show eto-year list
 
 USAGE:
-    etoyear [option -h,-v,-k] [year (should >0)(default:${DEFAULT_YEAR})] [num of displayline(s) (should >0)(default:${DEFAULT_LINE})]
-
-EXAMPLE:
-    etoyear             : show list from this year to the next ${DEFAULT_LINE} years in emoji
-    etoyear -k 1999 100 : show list from 1999 to the next 100 years in kanji
+    etoyear [-hvk] <begin> <num>
 
 VERSION:
     etoyear version ${VER}
@@ -36,6 +32,7 @@ OPTION:
    -k, --kanji   : show animal(s) in kanji
 EOS
 }
+
 # version
 function show_version() {
   cat << EOS
@@ -48,58 +45,62 @@ EOS
 # main
 function main() {
   # prosess options(help, version, kanji)
-  case "$1" in
+  local animals year times
+  args=()
+  animals=("${ANIMALS_EMOJI[@]}")
+  for i in "${@}"; do
+    case "$i" in
+      -h | --help)
+        show_help
+        return 0
+        ;;
+      -v | --version)
+        show_version
+        return 0
+        ;;
+      -k | --kanji)
+        animals=("${ANIMALS_KANJI[@]}")
+        ;;
+      -*)
+        echo "[err]: invalid option $i" >&2
+        show_help
+        return 1
+        ;;
+      *)
+        args+=("$i")
+        ;;
+    esac
+  done
 
-    -h | --help)
+  if [ ${#args[@]} = 0 ]; then
+    year="$(date +%Y)"
+    times="12"
+  elif [ ${#args[@]} = 2 ]; then
+    if [[ ${args[0]} -le 0 ]]; then
+      echo "[err]: begin year (${args[0]}) should be positive int" >&2
       show_help
-      exit          0
-      ;;
-    -v | --version)
-      show_version
-      exit             0
-      ;;
-    -k | --kanji)
-      local _animals=("${ANIMALS_KANJI[@]}")
-      shift
-      ;;
-    -*)
-      echo "ARGUMENT_ERROR::invalid option:$1." 1>&2
-      exit                                              1
-      ;;
-    *)
-      local _animals=("${ANIMALS_EMOJI[@]}")
-      ;;
-
-  esac
-
-  if [[ $# == 0 ]]; then
-    if [[ ${_animals[0]} == "申"       ]]; then
-      main -k "${DEFAULT_YEAR} ${DEFAULT_LINE}"
+      exit 1
+    elif [ "${args[1]}" -le 0 ]; then
+      echo "[err]: num (${args[1]}) should be positive int" >&2
+      show_help
+      exit 1
     else
-      main "${DEFAULT_YEAR}" "${DEFAULT_LINE}"
+      year="${args[0]}"
+      times="${args[1]}"
     fi
-    exit 0
+  else
+    echo "[err]: positioal argnum (${#args[@]}) should be 2" >&2
+    show_help
+    return 1
   fi
 
-  local _year="$1" _times="$(($2 - 1))"
-
-  if [[ $1 -le 0 ]]; then
-    echo 'ARGUMENT_ERROR::first argument should be more than 0.' 1>&2
-    exit                                                                   1
-  fi
-
-  if [[ $# == 1 ]]; then
-    _times=$((DEFAULT_LINE - 1))
-  elif [[ $2 -le 0 ]]; then
-    echo 'ARGUMENT_ERROR::second argument should be more than 0.' 1>&2
-    exit                                                                    1
-  fi
-
-  local _ind=$((_year % 12))
-
-  for i in $(seq 0 ${_times}); do
-    echo "${_animals[$(((_ind + i) % 12))]}"
-  done | nl -n ln -s' ' -v "${_year}"
+  local ind="$((year % 12))"
+  for ((i = 0; i < times; i++)); do
+    at=$(((ind + i) % 12))
+    echo -n "$((year + i)) "
+    echo "${animals[at]}"
+  done
 }
+
 main "$@"
 exit $?
