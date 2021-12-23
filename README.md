@@ -13,7 +13,7 @@ wget https://raw.githubusercontent.com/eggplants/etoyear/master/etoyear
 chmod +x etoyear
 
 # global
-sudo install -m+x etoyear /usr/local/bin
+sudo install etoyear /usr/local/bin
 ```
 
 ## Usage
