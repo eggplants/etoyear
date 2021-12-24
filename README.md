@@ -54,15 +54,15 @@ NAME:
 USAGE:
     etoyear [-hvk] <begin> <num>
 
+OPTION:
+    -h, --help    : show help
+    -v, --version : show version
+    -k, --kanji   : show animal(s) in kanji
+
 VERSION:
     etoyear version 0.0.4
     Copyright (c) 2019-2021 haruna <github.com/eggplants>
     Released under the MIT License.
-
-OPTION:
-   -h, --help    : show help
-   -v, --version : show version
-   -k, --kanji   : show animal(s) in kanji
 ```
 
 ## License
