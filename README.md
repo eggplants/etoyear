@@ -1,8 +1,6 @@
 # `etoyear`
 
-Show eto-year(十二支).
-
-Ref: [Earthly_Branches - Wikipedia](https://en.wikipedia.org/wiki/Earthly_Branches)
+- show [eto-year](https://www.nippon.com/en/features/jg00110) list
 
 ## Install
 
